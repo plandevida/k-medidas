@@ -156,12 +156,16 @@ if __name__ == "__main__":
 	clase1.setVCenter([6.70,3.43])
 	clase2 = Class(1,"Clase 2")
 	clase2.setVCenter([2.39,2.94])
+
 	kmedias = KMedias(2)
+
 	matrix = [0.022,0.978,0.003,0.997,0.03,0.97,0.002,0.998,0.0,1.0,0.997,0.003,0.997,0.003,0.946,0.054,1.0,0.0,0.990,0.01]
 	matrix = numpy.reshape(matrix,(10,2))
 	kmedias.setUMatrix(matrix)
+
 	kmedias.addClass(clase1)
 	kmedias.addClass(clase2)
+
 	kmedias.addXVector([1,1])
 	kmedias.addXVector([1,3])
 	kmedias.addXVector([1,5])
@@ -172,9 +176,11 @@ if __name__ == "__main__":
 	kmedias.addXVector([7,1])
 	kmedias.addXVector([7,3])
 	kmedias.addXVector([7,5])
-	kmedias.doTraining(0.02,2)
+
+	kmedias.doTraining(epsilonLimit=0.02,b=2)
+	
 	print kmedias.clasifyEuclideanDistance([2,3])
-	print kmedias.clasifyProbability([2,3],2)
+	print kmedias.clasifyProbability([2,3],b=2)
 	
 
 	
