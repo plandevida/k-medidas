@@ -41,14 +41,19 @@ class KMedias():
 			for key in self.classes:
 				delta = self.calculateV(self.classes[key],b)
 				bBreak = bBreak and (delta<epsilonLimit)
-			print ">> Iteracion ",i
+			print ">>>>>>>>>>>>>>>>>>Iteracion ",i
 			for key in self.classes:
-				print "Vector v de la clase ", self.classes[key].getClassName()
+				print ">>> Vector v de la clase ", self.classes[key].getClassName()
 				print  self.classes[key].getVCenter()
 			i+=1
 			self.updateUMatrix(b)
-			print "Matriz U"
-			print self.uMatrix
+			print ">>> Matriz U"
+			''' set_printoptions for numpy configures the formatter for printing numpy matrix
+				linewidth=nan sets no width limits for array lines '''
+			numpy.set_printoptions(linewidth=numpy.nan)
+			print numpy.transpose(self.uMatrix)
+			''' Resets the formatter '''
+			numpy.set_printoptions()
 		
 	def calculateV(self,c,b):
 
@@ -57,12 +62,10 @@ class KMedias():
 		newVDivisor = 0
 		
 		for i in range(len(self.xVectors)):
-			'''dividend is a temp var equals P(ci/xj)'''
-			#dividend = self.calculateP(self.uMatrix[i][c.getIndex()],self.xVectors[i],b)
+			'''dividend is a temp var equals P(uij/xj)'''
 			dividend = self.uMatrix[i][c.getIndex()]
 			newVDividend = numpy.add(newVDividend, numpy.dot(numpy.power(dividend,b),self.xVectors[i]))
-			'''divisor is a temp var equals P(ci/xj) '''
-			#divisor = self.calculateP(self.uMatrix[i][c.getIndex()],self.xVectors[i],b)
+			'''divisor is a temp var equals P(uij/xj) '''
 			divisor = self.uMatrix[i][c.getIndex()]
 			newVDivisor = numpy.add(newVDivisor, numpy.power(divisor,b))
 
@@ -75,17 +78,21 @@ class KMedias():
 
 	def calculateP(self,v1,v2,b):
 
-		'''We calculate de dividen 1/dij ^ 1/b-1 '''
-		dij = numpy.power(numpy.linalg.norm(numpy.subtract(v2,v1)),2)
+		'''We calculate de dividend 1/dij ^ 1/b-1 '''
+		dij = self.calculateEuclideanDistance2(v1,v2)
 		dividend = (1/numpy.power(dij, (1/(b-1))))
 
 		'''We calculate de divisor'''
 		divisor = 0
 		for key in self.classes:
-			drj = numpy.power(numpy.linalg.norm(numpy.subtract(v2,self.classes[key].getVCenter())),2)
+			drj = self.calculateEuclideanDistance2(v2,self.classes[key].getVCenter())
 			divisor +=  (1/numpy.power(drj, (1/(b-1))))
 
 		return dividend/divisor
+
+	def calculateEuclideanDistance2(self,v1,v2):
+
+		return numpy.power(numpy.linalg.norm(numpy.subtract(v2,v1)),2)
 
 	def updateUMatrix(self,b):
 
@@ -96,10 +103,28 @@ class KMedias():
 				self.uMatrix[i][self.classes[key].getIndex()] = self.calculateP(self.classes[key].getVCenter(),self.xVectors[i],b)
 
 	def clasifyEuclideanDistance(self,vector):
-		pass
+		
+		className= None
+		mini = float('inf')
 
-	def clasifyProbability(self,vector):
-		pass
+		print ">>>> Clasificacion de distancia vector ",vector
+		for key in self.classes:
+			distance = self.calculateEuclideanDistance2(self.classes[key].getVCenter(),vector)
+			print "Distancia a la clase ",self.classes[key].getClassName(), ": ",distance
+			if(distance < mini):
+				mini = distance
+				className = key
+		return className
+
+	def clasifyProbability(self,vector,b):
+		
+		print ">>>> Clasificacion de probabilidad vector ",vector
+		pVector=[]
+		for key in self.classes:
+			p = self.calculateP(self.classes[key].getVCenter(),vector,b)
+			pVector.append(self.classes[key].getClassName() + " = "+str(p))
+
+		return pVector
 		
 class Class():
 
@@ -148,7 +173,8 @@ if __name__ == "__main__":
 	kmedias.addXVector([7,3])
 	kmedias.addXVector([7,5])
 	kmedias.doTraining(0.02,2)
-	
+	print kmedias.clasifyEuclideanDistance([2,3])
+	print kmedias.clasifyProbability([2,3],2)
 	
 
 	
