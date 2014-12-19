@@ -41,7 +41,7 @@ class KMeans():
 			for key in self.classes:
 				delta = self.calculateV(self.classes[key],b)
 				bBreak = bBreak and (delta<epsilonLimit)
-			print ">>>>>>>>>>>>>>>>>>Iteracion ",i
+			print ">>>>>>>>>>>>>>>>>>Iteracion ", i
 			for key in self.classes:
 				print ">>> Vector v de la clase ", self.classes[key].getClassName()
 				print  self.classes[key].getVCenter()
@@ -78,16 +78,18 @@ class KMeans():
 
 	def calculateP(self,v1,v2,b):
 
-		'''We calculate de dividend 1/dij ^ 1/b-1 '''
+		'''We calculate the dividend 1/dij ^ 1/b-1 '''
 		dij = self.calculateEuclideanDistance2(v1,v2)
 		dividend = (1/numpy.power(dij, (1/(b-1))))
+		print dividend
 
-		'''We calculate de divisor'''
+		'''We calculate the divisor'''
 		divisor = 0
 		for key in self.classes:
+
 			drj = self.calculateEuclideanDistance2(v2,self.classes[key].getVCenter())
 			divisor +=  (1/numpy.power(drj, (1/(b-1))))
-
+		print divisor
 		return dividend/divisor
 
 	def calculateEuclideanDistance2(self,v1,v2):
