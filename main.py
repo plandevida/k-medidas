@@ -9,7 +9,6 @@ def readMedidas(file):
 		f = fileHelper.openReadOnlyFile(file)
 
 		lineas = f.readlines()
-
 		medidas = []
 		for linea in lineas:
 			linea = linea.split(",")

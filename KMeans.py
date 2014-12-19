@@ -1,6 +1,6 @@
 import numpy
 
-class KMedias():
+class KMeans():
 
 	def __init__(self,N):
 
@@ -157,7 +157,7 @@ if __name__ == "__main__":
 	clase2 = Class(1,"Clase 2")
 	clase2.setVCenter([2.39,2.94])
 
-	kmedias = KMedias(2)
+	kmedias = KMeans(2)
 
 	matrix = [0.022,0.978,0.003,0.997,0.03,0.97,0.002,0.998,0.0,1.0,0.997,0.003,0.997,0.003,0.946,0.054,1.0,0.0,0.990,0.01]
 	matrix = numpy.reshape(matrix,(10,2))
