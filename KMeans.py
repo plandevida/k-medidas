@@ -41,13 +41,13 @@ class KMeans():
 			for key in self.classes:
 				delta = self.calculateV(self.classes[key],b)
 				bBreak = bBreak and (delta<epsilonLimit)
-			print ">>>>>>>>>>>>>>>>>>Iteracion ", i
+			print "\n>>>>>>>>>>>>>>>>>>Iteracion ", i
 			for key in self.classes:
-				print ">>> Vector v de la clase ", self.classes[key].getClassName()
+				print "\n>>> Vector v de la clase\n", self.classes[key].getClassName()
 				print  self.classes[key].getVCenter()
 			i+=1
 			self.updateUMatrix(b)
-			print ">>> Matriz U"
+			print "\n>>> Matriz U\n"
 			''' set_printoptions for numpy configures the formatter for printing numpy matrix
 				linewidth=nan sets no width limits for array lines '''
 			numpy.set_printoptions(linewidth=numpy.nan)
@@ -81,7 +81,6 @@ class KMeans():
 		'''We calculate the dividend 1/dij ^ 1/b-1 '''
 		dij = self.calculateEuclideanDistance2(v1,v2)
 		dividend = (1/numpy.power(dij, (1/(b-1))))
-		print dividend
 
 		'''We calculate the divisor'''
 		divisor = 0
@@ -89,7 +88,7 @@ class KMeans():
 
 			drj = self.calculateEuclideanDistance2(v2,self.classes[key].getVCenter())
 			divisor +=  (1/numpy.power(drj, (1/(b-1))))
-		print divisor
+		
 		return dividend/divisor
 
 	def calculateEuclideanDistance2(self,v1,v2):
@@ -109,7 +108,7 @@ class KMeans():
 		className= None
 		mini = float('inf')
 
-		print ">>>> Clasificacion de distancia vector ",vector
+		print "\n>>> Clasificacion de distancia vector ",vector ,"\n"
 		for key in self.classes:
 			distance = self.calculateEuclideanDistance2(self.classes[key].getVCenter(),vector)
 			print "Distancia a la clase ",self.classes[key].getClassName(), ": ",distance
